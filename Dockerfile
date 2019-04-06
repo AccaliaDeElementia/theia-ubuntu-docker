@@ -9,7 +9,6 @@ ENV LC_ALL C.UTF-8
 EXPOSE 52924/tcp 3000-3999/tcp 3000-3999/udp
 
 VOLUME /home/ubuntu
-VOLUME /var/run/docker.sock
 
 ADD theia /theia
 
@@ -55,7 +54,7 @@ RUN groupadd -g 1000 ubuntu \
     python3 \
     python3-pip \
     python3-virtualenv \
-    software-properties-common
+    software-properties-common \
     sudo \
     postgresql-client-common \
     time \
@@ -66,11 +65,11 @@ RUN groupadd -g 1000 ubuntu \
   && \
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
   && \
-  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
   && \
   apt-get update \
   && \
-  apt-get install docker-ce docker-ce-cli containerd.io
+  apt-get install -y docker-ce docker-ce-cli containerd.io \
   && \
   chmod 777 /tmp \
   && \
@@ -82,18 +81,18 @@ RUN groupadd -g 1000 ubuntu \
   && \
   apt-get install -y nodejs \
   && \
-  npm install -g yarn
+  npm install -g yarn \
+  && \
+  chown -R ubuntu:ubuntu /home/ubuntu
 
 USER ubuntu
 
 WORKDIR /theia
 
-RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
-  && \
-  yarn \
+RUN yarn \
   && \
   yarn theia build
   
-CMD ["yarn", "theia", "start", "/home/ubuntu", "--listen", "0.0.0.0", "--port", "52924"]
+CMD ["yarn", "theia", "start", "/home/ubuntu", "--hostname", "0.0.0.0", "--port", "52924"]
 
 HEALTHCHECK CMD curl -f http://localhost:52924 >/dev/null
