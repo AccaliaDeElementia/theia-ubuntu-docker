@@ -71,7 +71,7 @@ RUN groupadd -g 1000 ubuntu \
   && \
   apt-get install -y docker-ce docker-ce-cli containerd.io \
   && \
-  gpasswd -a ubuntu docker
+  gpasswd -a ubuntu docker \
   && \
   chmod 777 /tmp \
   && \
