@@ -94,7 +94,9 @@ WORKDIR /theia
 RUN yarn \
   && \
   yarn theia build
-  
+
+ENV SHELL /bin/bash
+ 
 CMD ["yarn", "theia", "start", "/home/ubuntu", "--hostname", "0.0.0.0", "--port", "52924"]
 
 HEALTHCHECK CMD curl -f http://localhost:52924 >/dev/null
