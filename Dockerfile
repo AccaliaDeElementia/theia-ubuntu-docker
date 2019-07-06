@@ -61,6 +61,7 @@ RUN groupadd -g 1000 ubuntu \
     tmux \
     tree \
     wget \
+    xxd \
     zip \
   && \
   curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - \
@@ -90,6 +91,8 @@ RUN groupadd -g 1000 ubuntu \
 USER ubuntu
 
 WORKDIR /theia
+
+ARG NOW=12345
 
 RUN yarn \
   && \
