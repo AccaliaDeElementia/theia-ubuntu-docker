@@ -12,6 +12,9 @@ VOLUME /home/ubuntu
 
 ADD theia /theia
 
+
+ARG NOW=12345
+
 # Add the user
 RUN groupadd -g 1000 ubuntu \
   && \
@@ -91,8 +94,6 @@ RUN groupadd -g 1000 ubuntu \
 USER ubuntu
 
 WORKDIR /theia
-
-ARG NOW=12345
 
 RUN yarn \
   && \
