@@ -11,9 +11,7 @@ EXPOSE 52924/tcp 3000-3999/tcp 3000-3999/udp
 VOLUME /home/ubuntu
 
 ADD theia /theia
-
-
-ARG NOW=12345
+ADD dbaeumer.vscode-eslint-1.9.1.vsix /theia/plugins
 
 # Add the user
 RUN groupadd -g 1000 ubuntu \
@@ -83,11 +81,13 @@ RUN groupadd -g 1000 ubuntu \
   && \
   chown -R ubuntu:ubuntu /theia \
   && \
-  curl -sL https://deb.nodesource.com/setup_8.x | bash - \
+  curl -sL https://deb.nodesource.com/setup_10.x | bash - \
   && \
   apt-get install -y nodejs \
   && \
   npm install -g yarn \
+  && \
+  npm install -g eslint \
   && \
   chown -R ubuntu:ubuntu /home/ubuntu
 
@@ -99,7 +99,8 @@ RUN yarn \
   && \
   yarn theia build
 
-ENV SHELL /bin/bash
+ENV SHELL=/bin/bash \
+    THEIA_DEFAULT_PLUGINS=local-dir:/theia/plugins
  
 CMD ["yarn", "theia", "start", "/home/ubuntu", "--hostname", "0.0.0.0", "--port", "52924"]
 
